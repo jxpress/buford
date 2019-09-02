@@ -25,6 +25,10 @@ type Headers struct {
 
 	// Topic for certificates with multiple topics.
 	Topic string
+
+	// PushType is the required notification parameter for iOS 13 and later, or watchOS 6 and later.
+	// By default push type is alert.
+	PushType string
 }
 
 // set headers for an HTTP request
@@ -54,4 +58,12 @@ func (h *Headers) set(reqHeader http.Header) {
 		reqHeader.Set("apns-topic", h.Topic)
 	}
 
+	var pushType string
+	if h.PushType != "" {
+		pushType = h.PushType
+	} else {
+		pushType = "alert"
+	}
+	reqHeader.Set("apns-push-type", pushType)
 }
+
